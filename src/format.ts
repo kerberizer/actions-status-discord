@@ -6,6 +6,7 @@ const formatters: Record<string, Formatter> = {
     push: pushFormatter,
     pull_request: pullRequestFormatter,
     release: releaseFormatter,
+    repository_dispatch: repositoryDispatchFormatter,
 }
 
 export function formatEvent(event: string, payload: Object): string {
@@ -34,4 +35,9 @@ function releaseFormatter(payload: any): string {
     const { name, body } = payload.release
     const nameText = name ? `**${name}**` : ''
     return `${nameText}${(nameText && body) ? "\n" : ""}${body || ""}`
+}
+
+function repositoryDispatchFormatter(payload: any): string {
+    const msgUndef: string = "`event_detail` not defined in `client_payload`"
+    return payload.client_payload.event_detail ? payload.client_payload.event_detail : msgUndef
 }
